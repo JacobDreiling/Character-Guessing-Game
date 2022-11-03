@@ -1,0 +1,95 @@
+Back end instructions for the game Figure:Out
+
+Follow along with Draft-algorithm.py on GitHub
+
+
+
+---- Setting up the game ----
+
+Create a string array to hold the valid responses. Make sure they're properly capitalized and spelled.
+
+Use built in Java methods to read the csv file with the character information. The file should be traversed like a 2-d array.
+
+The first row contains the word "characters" followed by all the questions. Create one array-list to hold the questions and another to hold the questions' indexes. Loop over every column except the first and add the question along with its index into the array-lists.
+
+Create an integer for the number of characters and initialize it to 0.
+
+Create 4 empty array-lists: one to hold the questions that have already been asked, one for the characters' names, one for the integer scores, and one to hold array-lists of each character's answers. The last one will be our table of answers.
+
+Loop through each row in the table except the first.
+	Increment the number of characters.
+	Add the first entry of the row to the names array-list.
+	Add the entry 0 to the scores array-list.
+	Create an array-list for this character's answers.
+	Loop through each column except the first.
+		If the entry is not a valid answer, display it along with which row and column it's on.
+		Otherwise, add it to the character's answers.
+	Add the character's answers as a new row to the answers table.
+
+Create the sigmoid method, which takes an integer and returns a double. The math formula is like this (x is the argument and n is the number of characters):
+
+sigmoid(x) = 1 / (1 + (n-1)*Math.exp(-x))
+
+Create a method that computes probabilities from an array-list of integers, returning an array-list of doubles. Compute the sigmoid of each entry and add them into a new array-list. Find the total of all those values, and divide each entry by that total. Return that array-list of doubles.
+
+Create a method to calculate entropy, it takes an array-list of doubles and returns a double.
+
+Create a method to figure out the score based on answers, it takes 2 string arguments and returns a double. It should have outputs based on this table:
+
+    yes maybe idk no
+yes   1   .5   0  -1
+maybe .5  .5   0  -.5
+idk   0   0    0   0
+no   -1  -.5   0   1
+
+Create a method that takes the current list of scores, a question index, and a string answer. Create a new array-list to hold the updated scores. Loop through each character.
+	Look up their list of answers and get the character's answer for that question's index.
+	Figure out the score based on the given answer vs the true answer.
+	Add the character's current score plus this new score as an entry in the new array-list.
+Return the list of updated scores.
+
+(The display method isn't necessary.)
+
+
+
+---- Playing the game ----
+
+Loop for 20 rounds (the number of rounds may change later):
+
+	Create an integer for the "best" question index and a double for the record smallest entropy, set them both to -1.
+	Loop through the unasked questions and their indexes.
+		Create a double for the average entropy set to 0.
+		Loop through each valid response.
+			Create a copy of the scores using the updating function, inputting the scores, current question index, and the current response.
+			Calculate the probabilities of those updated scores.
+			Create a double for the probability of the current response, set it to 0.
+			Loop over every character's response to the current question.
+				If it matches the current response, add that character's probability to the probability of the current response. Here's an example:
+
+Checking "Yes":
+
+Character  Probability  Their answer
+...		...	...
+Santa		0.1	Yes   // Probability of answering "yes" gets 0.1 added to it
+Spongebob	0.05	No
+Po		0.2	No
+Goku		0.01	Yes   // Probability of answering "yes" gets 0.01 added to it
+...		...	...
+
+			Calculate the entropy of the characters' probabilities, multiply it by the probability of the current response, and add that to the average entropy.
+		If the current record entropy is -1 (at the start) or if the average entropy is smaller than the record:
+			Set the record entropy to this new smaller value.
+			Set the "best" question's index to the record index.
+	Remove the best question and its index from the array-lists.
+	Add that removed question to the array-list of used questions.
+	Send the best question to the front-end to be asked to the user.
+	Update the scores using the best question's index and the user's given answer.
+
+
+
+---- Wrapping up the game ----
+
+After the loop for all the rounds, loop through all the character's scores.
+Find the character whose score is the largest.
+Send their name to the front-end to see if it's the user's character.
+If it is, the front-end displays the winning message, otherwise the losing message.
