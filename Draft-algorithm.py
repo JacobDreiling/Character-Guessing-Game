@@ -4,6 +4,8 @@ from console import clear
 
 # ---- Initialize the game
 
+responses=['Yes','No','Maybe','I don\'t know']
+
 with open('CharacterTable.csv','r') as f:
 	table=list(csv.reader(f)) #needed to change a special character (é)
 	questions=list(enumerate(table[0][1:]))
@@ -16,7 +18,14 @@ with open('CharacterTable.csv','r') as f:
 		n+=1
 		names+=[row[0]]
 		scores+=[0]
-		answers+=[row[1:]]
+		new_answers=[]
+		for i in range(len(row[1:])):
+			answer=row[i+1]
+			if answer in responses;
+				new_answers+=[answer]
+			else:
+				print(answer+" is not a valid answer for "+row[0]+" at "+str(i))
+		answers+=[new_answers]
 
 sig=lambda x:1/(1+(n-1)*exp(-x))
 
@@ -75,7 +84,7 @@ for round in range(rounds):
 		# calculate expected entropy
 		q,text=questions[i]
 		s_avg=0
-		for response in ['Yes','No','Maybe','I don\'t know']:
+		for response in responses:
 			P=probs(updated(scores,q,response))
 			p_ans=0
 			for j in range(n):
