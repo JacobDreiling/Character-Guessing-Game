@@ -1,5 +1,3 @@
-import jdk.dynalink.linker.support.CompositeTypeBasedGuardingDynamicLinker;
-
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.Scanner;
@@ -35,10 +33,11 @@ public class BackEnd {
         String guess = getBestChar();
         System.out.println("Is "+guess+" your character?");
         if(in.nextLine().equals("yes"))
-            System.out.println("Nice I win bitch");
+            System.out.println("Nice I win");
         else
             System.out.println("Dang I lost");
     }
+    
     public static void initialize() throws IOException {
         // initializing the game
         // here I am creating an ArrayList for the questions
